@@ -127,12 +127,13 @@ So, here's my payload which triggers `alert(document.domain)` and then the HTML 
 
 **Payload**: `<h1 style='color: #00bfa5' data-debug='javascript:alert(document.domain)'>Yay!</h1>`
 
-**Tested on 12/Jan/2022.**
 
-*Browser versions (latest):*
-**Chrome: Version 97.0.4692.71 (Official Build) (64-bit)**
 
-**Firefox: 96.0**
+**Browser versions (latest):**
+
+- Chrome: Version 97.0.4692.71 (Official Build) (64-bit)
+
+- Firefox: 96.0
 
 ## Results
 
@@ -143,5 +144,12 @@ So, here's my payload which triggers `alert(document.domain)` and then the HTML 
 ### Firefox
 
 ![Firefox](/images/intigriti-jan-xss-challenge-2022/firefox.jpg)
+
+
+## Surprise
+
+So, after you click the `OK` button from the alert dialog it closes and you get a `Yay!` message because everything worked as expected.
+
+![Yay](/images/intigriti-jan-xss-challenge-2022/yay.jpg)
 
 Thank you for reading my write-up. Hope you enjoyed it. :)

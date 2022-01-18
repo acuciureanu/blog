@@ -1,0 +1,4 @@
+[submodule "simplewriteups/public"]
+	path = simplewriteups/public
+	url = https://github.com/acuciureanu/acuciureanu.github.io.git
+	branch = main

@@ -1,0 +1,5 @@
+baseURL = "http://acuciureanu.github.io/"
+languageCode = "en-us"
+title = "BLOG | My Simple Writeups"
+
+theme="contrast-hugo"

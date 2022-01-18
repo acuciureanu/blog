@@ -1,5 +1,5 @@
 ---
-title: "How I solved January XSS challenge 0122 from intigriti(dot)com"
+title: "This is how I solved the January XSS challenge @ intigriti.com"
 date: 2022-01-18T13:26:17+02:00
 ---
 
@@ -87,6 +87,10 @@ Object.keys(identifiers).reduce((acc, key) => { acc[key] = window.atob(identifie
 
 We pass a reducer to the [reduce()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce) function which decodes the BASE64 values from `identifiers` and then returns a transformed object which will help us with the deobfuscation.
 
+And here's how it should look for you.
+
+![Decoded Strings](/images/intigriti-jan-xss-challenge-2022/decoded.jpg)
+
 I thought about writing a tool for mass deobfuscation, but since there were only a couple of javascript files it took me only a couple of minutes to deobfuscate both `index.js` files under `pages` and figure out this whole challenge.
 
 After manually deobfuscating all the interesting files, I found the issue under `/js/pages/I0x1/index.js`.
@@ -127,6 +131,7 @@ So, here's my payload which triggers `alert(document.domain)` and then the HTML 
 
 *Browser versions (latest):*
 **Chrome: Version 97.0.4692.71 (Official Build) (64-bit)**
+
 **Firefox: 96.0**
 
 ## Results

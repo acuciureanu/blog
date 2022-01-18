@@ -1,5 +1,5 @@
-baseURL = "http://acuciureanu.github.io/"
+baseURL = "https://acuciureanu.github.io/"
 languageCode = "en-us"
-title = "BLOG | My Simple Writeups"
+title = "my simple write-ups"
 
 theme="contrast-hugo"

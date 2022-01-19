@@ -95,7 +95,7 @@ I thought about writing a tool for mass deobfuscation, but since there were only
 
 After manually deobfuscating all the interesting files, I found the issue under `/js/pages/I0x1/index.js`.
 
-The function signature `I0xB(I0xC translates to function handleAttributes(element)`:
+The function signature `function I0xB(I0xC)` translates to `function handleAttributes(element)`:
 
 ```
 function handleAttributes(element) {

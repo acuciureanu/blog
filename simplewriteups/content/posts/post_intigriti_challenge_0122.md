@@ -11,20 +11,20 @@ This challenge was very interesting because it was my first time hunting for an 
 
 ## Recon
 
-I initially started looking at the javascript code by using the Developers Tools in Chrome and I noticed that the  `identifiers`  object was defined in  **_routes.js_**.
+I initially started looking at the javascript code by using the `Developers Tools` in `Chrome` and I noticed that the  `identifiers`  object was defined in  **_routes.js_**.
 
-After I looked closely, I see that the values of the object's properties are BASE64 encoded strings.
+After I looked closely, I noticed that the values of the object's properties are BASE64 encoded strings.
 
 ![Source Map](/images/intigriti-jan-xss-challenge-2022/identifiers.jpg)
 
 
 ## Figuring out obfuscation
 
-I navigated under `js/pages/` and found out that the code there is obfuscated and that the signatures of the functions contains property names from our identifiers object and that `window.atob()` is used to decode the BASE64 encoded values from our `identifiers` object mentioned above.
+I navigated under `js/pages/` and found out that the code there is obfuscated and that the signatures of the functions contain property names from our `identifiers` object and that `window.atob()` is used to decode the BASE64 encoded values.
 
 ![Obfuscated code](/images/intigriti-jan-xss-challenge-2022/pages.jpg)
 
-For decoding all the BASE64 encoded values from `identifiers` we can write now some easy javascript code which can be ran withing browser's console.
+For decoding all the BASE64 encoded strings I wrote some easy javascript code which can be ran in browser's console.
 
 ```javascript
 const identifiers = {
@@ -85,17 +85,17 @@ const identifiers = {
 Object.keys(identifiers).reduce((acc, key) => { acc[key] = window.atob(identifiers[key]); return acc }, {});
 ```
 
-We pass a reducer to the [reduce()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce) function which decodes the BASE64 values from `identifiers` and then returns a transformed object which will help us with the deobfuscation.
+We passed a reducer to the [reduce()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce) function which decodes the BASE64 values from `identifiers` and then returns a transformed object which will help us with the deobfuscation.
 
 And here's how it should look for you.
 
 ![Decoded Strings](/images/intigriti-jan-xss-challenge-2022/decoded.jpg)
 
-I thought about writing a tool for mass deobfuscation, but since there were only a couple of javascript files it took me only a couple of minutes to deobfuscate both `index.js` files under `pages` and figure out this whole challenge.
+I thought about writing a tool for mass deobfuscation, but since there were only a couple of javascript files it took me only a few minutes to deobfuscate both `index.js` files under `pages` and figure out this whole challenge.
 
 After manually deobfuscating all the interesting files, I found the issue under `/js/pages/I0x1/index.js`.
 
-The function signature function `I0xB(I0xC translates to function handleAttributes(element)`:
+The function signature `I0xB(I0xC translates to function handleAttributes(element)`:
 
 ```
 function handleAttributes(element) {
@@ -114,7 +114,7 @@ function handleAttributes(element) {
 
 ## Identify XSS
 
-Hm. So, when this `handleAttributes` function is called by passing an `element` as an argument, if there's a `data-debug` attribute set on any of the child elements then a new function is created using [new Function()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/Function) and the official documentation suggests that calling the constructor directly is not exactly a best practice.
+Hm... So, when this `handleAttributes` function is called by passing an `element` as an argument, if there's a `data-debug` attribute set on any of the child elements then a new function is created using [new Function()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/Function) and the official documentation suggests that calling the constructor directly is not exactly a best practice.
 
 > The Function constructor creates a new Function object. Calling the constructor directly can create functions dynamically, but suffers from security and similar (but far less significant) performance issues to [Global_Objects/eval](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval). However, unlike eval, the Function constructor creates functions which execute in the global scope only.
 
@@ -152,4 +152,6 @@ So, after you click the `OK` button from the alert dialog it closes and you get 
 
 ![Yay](/images/intigriti-jan-xss-challenge-2022/yay.jpg)
 
-Thank you for reading my write-up. Hope you enjoyed it. :)
+Thank you for reading my write-up. 
+
+Hope you enjoyed it. :)

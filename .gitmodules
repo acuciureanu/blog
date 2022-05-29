@@ -2,3 +2,7 @@
 	path = simplewriteups/public
 	url = git@github.com:acuciureanu/acuciureanu.github.io.git
 	branch = main
+[submodule "simplewriteups/acuciureanu.github.io"]
+	path = simplewriteups/acuciureanu.github.io
+	url = git@github.com:acuciureanu/acuciureanu.github.io.git
+	branch = main

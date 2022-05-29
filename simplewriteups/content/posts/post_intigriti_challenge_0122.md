@@ -4,10 +4,9 @@ date: 2022-01-18T13:26:17+02:00
 ---
 
 
-**Challenge**: https://challenge-0122.intigriti.io/
+**Challenge**: `https://challenge-0122.intigriti.io/`
 
 This challenge was very interesting because it was my first time hunting for an XSS while having to deal with React and some strange javascript obfuscation that I'd have to figure out first.
-
 
 ## Recon
 
@@ -16,7 +15,6 @@ I initially started looking at the javascript code by using the `Developers Tool
 After I looked closely, I noticed that the values of the object's properties are BASE64 encoded strings.
 
 ![Source Map](/images/intigriti-jan-xss-challenge-2022/identifiers.jpg)
-
 
 ## Figuring out obfuscation
 
@@ -97,27 +95,25 @@ After manually deobfuscating all the interesting files, I found the issue under 
 
 The function signature `function I0xB(I0xC)` translates to `function handleAttributes(element)`:
 
-```
+```javascript
 function handleAttributes(element) {
-	for (const child of child['children']) {
-		if ("data-debug" in child['attributes']) {
-			new Function(
-				child 'getAttribute'
-			)();
-		}
+  for (const child of child['children']) {
+    if ("data-debug" in child['attributes']) {
+      new Function(
+        child 'getAttribute'
+      )();
+    }
 
-		handleAttributes(child);
-	}
+    handleAttributes(child);
+  }
 }
 ```
-
 
 ## Identify XSS
 
 Hm... So, when this `handleAttributes` function is called by passing an `element` as an argument, if there's a `data-debug` attribute set on any of the child elements then a new function is created using [new Function()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/Function) and the official documentation suggests that calling the constructor directly is not exactly a best practice.
 
 > The Function constructor creates a new Function object. Calling the constructor directly can create functions dynamically, but suffers from security and similar (but far less significant) performance issues to [Global_Objects/eval](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval). However, unlike eval, the Function constructor creates functions which execute in the global scope only.
-
 
 ## Exploit flaw
 
@@ -126,8 +122,6 @@ Now that I knew I had to play around with the `data-debug` attribute, I had to s
 So, here's my payload which triggers `alert(document.domain)` and then the HTML element will display the message `Yay!` on page:
 
 **Payload**: `<h1 style='color: #00bfa5' data-debug='javascript:alert(document.domain)'>Yay!</h1>`
-
-
 
 **Browser versions (latest):**
 
@@ -145,13 +139,12 @@ So, here's my payload which triggers `alert(document.domain)` and then the HTML 
 
 ![Firefox](/images/intigriti-jan-xss-challenge-2022/firefox.jpg)
 
-
 ## Surprise
 
 So, after you click the `OK` button from the alert dialog it closes and you get a `Yay!` message because everything worked as expected.
 
 ![Yay](/images/intigriti-jan-xss-challenge-2022/yay.jpg)
 
-Thank you for reading my write-up. 
+Thank you for reading my write-up.
 
 Hope you enjoyed it. :)

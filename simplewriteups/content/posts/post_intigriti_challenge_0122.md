@@ -145,6 +145,6 @@ So, after you click the `OK` button from the alert dialog it closes and you get 
 
 ![Yay](/images/intigriti-jan-xss-challenge-2022/yay.jpg)
 
-Thank you for reading my write-up.
+Thank you for reading my write-up!
 
 Hope you enjoyed it. :)
